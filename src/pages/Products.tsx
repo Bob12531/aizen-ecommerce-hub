@@ -63,14 +63,14 @@ const Products = () => {
 
   const filteredProducts = PRODUCTS?.filter(product => {
     if (!product) return false;
-    const matchesSearch = product.title.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch = product.title.toLowerCase().includes((searchQuery || "").toLowerCase());
     const matchesCategory = selectedCategory === "all" || product.category === selectedCategory;
     return matchesSearch && matchesCategory;
   }) || [];
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-background">
         <Navigation />
         <main className="container mx-auto px-4 pt-24">
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -88,7 +88,7 @@ const Products = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <Navigation />
       
       <main className="container mx-auto px-4 pt-24">
@@ -97,11 +97,11 @@ const Products = () => {
             <Input
               type="text"
               placeholder="Search products..."
-              value={searchQuery}
+              value={searchQuery || ""}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10"
             />
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
           </div>
         </div>
 
@@ -109,7 +109,7 @@ const Products = () => {
           <button
             onClick={() => setSelectedCategory("all")}
             className={`px-4 py-2 rounded-full ${
-              selectedCategory === "all" ? "bg-aizen-900 text-white" : "bg-white"
+              selectedCategory === "all" ? "bg-primary text-primary-foreground" : "bg-background"
             }`}
           >
             All
@@ -117,7 +117,7 @@ const Products = () => {
           <button
             onClick={() => setSelectedCategory("electronics")}
             className={`px-4 py-2 rounded-full ${
-              selectedCategory === "electronics" ? "bg-aizen-900 text-white" : "bg-white"
+              selectedCategory === "electronics" ? "bg-primary text-primary-foreground" : "bg-background"
             }`}
           >
             Electronics
@@ -125,7 +125,7 @@ const Products = () => {
           <button
             onClick={() => setSelectedCategory("deals")}
             className={`px-4 py-2 rounded-full ${
-              selectedCategory === "deals" ? "bg-aizen-900 text-white" : "bg-white"
+              selectedCategory === "deals" ? "bg-primary text-primary-foreground" : "bg-background"
             }`}
           >
             Deals
@@ -136,6 +136,11 @@ const Products = () => {
           {filteredProducts.map((product) => (
             <ProductCard key={product.id} {...product} />
           ))}
+          {filteredProducts.length === 0 && (
+            <div className="col-span-full text-center py-8 text-muted-foreground">
+              No products found
+            </div>
+          )}
         </div>
       </main>
     </div>
